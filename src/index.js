@@ -1,10 +1,16 @@
+import './styles/index.scss'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 // import { Provider } from 'react-redux'
 // import store from './app/store'
-import App from './app/App'
+import Home from './common/Home'
+import Error from './common/Error'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import Header from './common/Header'
+import Footer from './common/Footer'
+import Login from './features/Login'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,15 +23,21 @@ const queryClient = new QueryClient({
     },
   },
 })
-const app = ReactDOM.createRoot(document.getElementById('app'))
+const app = ReactDOM.createRoot(document.getElementById('root'))
 
 app.render(
   <QueryClientProvider client={queryClient}>
     {/* <Provider store={store}> */}
-      <React.StrictMode>
-        <App />
-        <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
-      </React.StrictMode>
+    <Router>
+      <Header />
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+      <Footer />
+    </Router>
+    <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
     {/* </Provider> */}
   </QueryClientProvider>
 )
