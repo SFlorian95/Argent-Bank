@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-// import { Provider } from 'react-redux'
-// import store from './app/store'
-import App from './app/App'
+import { Provider } from 'react-redux'
+import store from './app/store'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import App from './app/App'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,15 +17,15 @@ const queryClient = new QueryClient({
     },
   },
 })
-const app = ReactDOM.createRoot(document.getElementById('app'))
+const app = ReactDOM.createRoot(document.getElementById('root'))
 
 app.render(
   <QueryClientProvider client={queryClient}>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <React.StrictMode>
         <App />
         <ReactQueryDevtools initialIsOpen={false}></ReactQueryDevtools>
       </React.StrictMode>
-    {/* </Provider> */}
+    </Provider>
   </QueryClientProvider>
 )
