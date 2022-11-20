@@ -1,21 +1,20 @@
-import { useMutation } from 'react-query'
-import { useDispatch } from 'react-redux'
-import { connection } from '../../auth/authApi'
-import { selectCurrentToken, setUser } from '../../auth/authSlice'
-import Welcome from '../Welcome/Welcome'
 import './Profile.scss'
+import Welcome from '../Welcome'
+import { useQuery } from 'react-query'
+import { getProfile } from '../profileApi'
+import { selectCurrentToken, setUser } from '../../auth/authSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
-const Profile = () => {
+const User = () => {
+  const dispatch = useDispatch()
+  const token = useSelector(selectCurrentToken)
 
-const dispatch = useDispatch()
-
-const connectionMutation = useMutation(connection, {
-  onSuccess: (data) => {
-    dispatch(setUser(data.body))
-  }
-})
-
-//connectionMutation.mutate(selectCurrentToken)
+  useQuery('profile', () =>
+    getProfile(token).then((res) => {
+      dispatch(setUser(res.body))
+      return res
+    })
+  )
 
   return (
     <div className="main bg-dark">
@@ -54,4 +53,5 @@ const connectionMutation = useMutation(connection, {
     </div>
   )
 }
-export default Profile
+
+export default User

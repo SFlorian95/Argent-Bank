@@ -1,60 +1,64 @@
-import { useState } from 'react'
-import { useMutation } from 'react-query'
-import { useDispatch } from 'react-redux'
-import { editAccount } from '../../auth/authApi'
-import { selectCurrentToken, setUser } from '../../auth/authSlice'
 import './EditProfile.scss'
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+  setUser,
+} from '../../auth/authSlice'
+import { toggleIsEditing } from '../profileSlice'
+import { useMutation } from 'react-query'
+import { updateProfile } from '../profileApi'
 
-const EditProfile = ({ user }) => {
+const EditProfile = () => {
   const dispatch = useDispatch()
-  const [open, setOpen] = useState(false)
-  const [firstname, setFirstname] = useState('')
-  const [lastname, setLastname] = useState('')
-
-  const handleFirstnameInput = (e) => setFirstname(e.target.value)
-
-  const handleLastnameInput = (e) => setLastname(e.target.value)
-
-  const editMutation = useMutation(editAccount, {
-    onSuccess: (data) => {
-        dispatch(setUser(data.body))
-    }
-  })
-
+  const user = useSelector(selectCurrentUser)
+  const token = useSelector(selectCurrentToken)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const handleFirstNameInput = (e) => setFirstName(e.target.value)
+  const handleLastNameInput = (e) => setLastName(e.target.value)
   const handleSubmit = (e) => {
     e.preventDefault()
-    editMutation.mutate({firstname, lastname}, selectCurrentToken)
+    console.log('submit', token)
+    updateProfileMutation.mutate({ firstName, lastName, token })
   }
 
-  return open ? (
-    <form onSubmit={handleSubmit}>
-      <div className="input-wrapper">
-        <label htmlFor="firstname">Firstname</label>
+  const updateProfileMutation = useMutation(updateProfile, {
+    onSuccess: (data) => {
+      dispatch(toggleIsEditing())
+      dispatch(setUser(data.body))
+    },
+  })
+
+  return (
+    <form className="form-edit-profile" onSubmit={handleSubmit}>
+      <div className="row">
         <input
           type="text"
-          id="firstname"
-          onChange={handleFirstnameInput}
-          value={firstname}
+          onChange={handleFirstNameInput}
+          value={firstName}
+          placeholder={user?.firstName}
+          required
         />
-      </div>
-      <div className="input-wrapper">
-        <label htmlFor="lastname">Lastname</label>
         <input
           type="text"
-          id="lastname"
-          onChange={handleLastnameInput}
-          value={lastname}
+          onChange={handleLastNameInput}
+          value={lastName}
+          placeholder={user?.lastName}
+          required
         />
       </div>
-      <div className='button-wrapper'>
-        <button className="edit-button" type='submit'>Save</button>
-        <button className="edit-button" onClick={!setOpen}>Cancel</button>
+      <div className="row">
+        <button className="button-edit-profile">Save</button>
+        <button
+          className="button-edit-profile"
+          onClick={() => dispatch(toggleIsEditing())}
+        >
+          Cancel
+        </button>
       </div>
     </form>
-  ) : (
-    <button className="edit-button" onClick={!setOpen}>
-      Edit Name
-    </button>
   )
 }
 
