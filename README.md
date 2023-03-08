@@ -1,3 +1,16 @@
+# Argent Bank
+
+Projet de formation Openclassrooms
+
+Utilisez une API pour un compte utilisateur bancaire avec React
+
+![image](https://user-images.githubusercontent.com/48679043/223760985-e262260c-3f9c-45a5-9d6b-11f15d2657ee.png)
+
+### Scénario 
+
+Vous venez de commencer à travailler chez Remede Agency, une agence spécialisée dans le développement d'applications web. L'équipe est principalement composée de développeurs back-end et vient de commencer à recruter d'autres spécialistes front-end. 
+Le projet concerne une nouvelle banque qui démarre, Argent Bank, qui essaie de percer dans le secteur et qui a besoin d'aide pour mettre en place son application.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
